@@ -13,11 +13,13 @@ class ViewController: UIViewController {
     // MARK: - UI Lazy Variables
     lazy var highScoreLabel: UILabel = {
         let label = UILabel()
+        label.text = "High Score: 0"
         return label
     }()
     
     lazy var currentScoreLabel: UILabel = {
         let label = UILabel()
+        label.text = "Current Score: 0"
         return label
     }()
     
@@ -35,6 +37,7 @@ class ViewController: UIViewController {
     // MARK: - UI Lazy Variables & Actions
     lazy var redButton: UIButton = {
         let button = UIButton()
+        button.setTitle("Red", for: .normal)
         button.setTitleColor(.red, for: .normal)
         button.tag = 0
         button.addTarget(self, action: #selector(makeGuess(button:)), for: .touchUpInside)
@@ -43,6 +46,7 @@ class ViewController: UIViewController {
     
     lazy var greenButton: UIButton = {
         let button = UIButton()
+        button.setTitle("Green", for: .normal)
         button.setTitleColor(.green, for: .normal)
         button.tag = 1
         button.addTarget(self, action: #selector(makeGuess(button:)), for: .touchUpInside)
@@ -51,6 +55,7 @@ class ViewController: UIViewController {
     
     lazy var blueButton: UIButton = {
         let button = UIButton()
+        button.setTitle("Blue", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         button.tag = 2
         button.addTarget(self, action: #selector(makeGuess(button:)), for: .touchUpInside)
@@ -75,6 +80,10 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         self.colorBoard.backgroundColor = currentColor.randomColor
         hideGOButtons()
+        
+        configureColorBoard()
+        configureLabelStackView()
+        configureColorButtonStackView()
         
     }
     
@@ -130,7 +139,7 @@ class ViewController: UIViewController {
         hideGOButtons()
     }
     
-    
+    // MARK: - Private Methods
     private func resetRandomColor() {
         self.currentColor.assignNewColor()
         self.colorBoard.backgroundColor = currentColor.randomColor
@@ -149,7 +158,68 @@ class ViewController: UIViewController {
         self.newGameButton.isHidden = true
     }
 
-
+    // MARK: - UI Constraint Methods
+    private func configureColorBoard() {
+        view.addSubview(colorBoard)
+        colorBoard.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            colorBoard.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            colorBoard.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            colorBoard.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.4),
+            colorBoard.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.8)
+        ])
+    }
+    
+    private func configureLabelStackView() {
+        let stackView = UIStackView(arrangedSubviews: [highScoreLabel, currentScoreLabel])
+        stackView.spacing = 0
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fillEqually
+        view.addSubview(stackView)
+    
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.8),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            stackView.bottomAnchor.constraint(equalTo: colorBoard.topAnchor, constant: 10)
+            
+        ])
+    }
+    
+    
+    private func configureColorButtonStackView() {
+        let stackView = UIStackView(arrangedSubviews: [redButton, greenButton, blueButton])
+        stackView.spacing = 2
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fillEqually
+        view.addSubview(stackView)
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+           stackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.8),
+            stackView.topAnchor.constraint(equalTo: colorBoard.bottomAnchor, constant: 5),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 5)
+        ])
+    }
+    
+    private func configureNewGameButton() {
+        view.addSubview(newGameButton)
+        newGameButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            
+        ])
+        
+    }
+    
+    
 
 }
 
